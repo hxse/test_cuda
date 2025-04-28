@@ -4,11 +4,12 @@ version = "0.1.0"
 requires-python = "==3.12.*"
 dependencies = [
     "numba",
-    "numpy",
     "whisperx",
     "torch",
     "torchvision",
     "torchaudio",
+    "numpy",
+    "pandas-ta @ git+https://github.com/hxse/pandas-ta.git@development",
 ]
 
 [tool.uv.sources]
