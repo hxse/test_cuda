@@ -60,6 +60,15 @@ def _compare_results_f64_f32(indicator_name, result_f64, result_f32, diff_thresh
             result_f64_compare = result_f64[:compare_len]
             result_f32_compare = result_f32[:compare_len]
 
+            # 检查NaN的位置和数量是否完全相同
+            if not np.array_equal(
+                np.isnan(result_f64_compare), np.isnan(result_f32_compare)
+            ):
+                print(
+                    f"{indicator_name} float64 vs. float32: NaN不匹配 - 数量或位置差异"
+                )
+                return False  # NaN不匹配
+
             # Find valid (non-NaN) indices within the comparable parts
             valid_indices = ~np.isnan(result_f64_compare) & ~np.isnan(
                 result_f32_compare
@@ -130,6 +139,15 @@ def _compare_results_f64_ta(indicator_name, result_f64, ta_result, diff_threshol
                 ta_result_compare = ta_result[
                     start_idx_compare : start_idx_compare + compare_len
                 ]
+
+                # 检查NaN的位置和数量是否完全相同
+                if not np.array_equal(
+                    np.isnan(result_f64_compare), np.isnan(ta_result_compare)
+                ):
+                    print(
+                        f"{indicator_name} float64 vs. pandas-ta: NaN不匹配 - 数量或位置差异"
+                    )
+                    return False  # NaN不匹配
 
                 # Find valid (non-NaN) indices within the comparable parts
                 valid_compare_indices = ~np.isnan(result_f64_compare) & ~np.isnan(
@@ -802,7 +820,7 @@ def calculate_macd_cpu_f32(prices, fast_period, slow_period, signal_period):
 # --- 主函数：测试所有指标 ---
 def main():
     # 数据规模
-    n_prices = 10_000
+    n_prices = 20_000
     rsi_period = 14
     ema_period = 20
     atr_period = 14
